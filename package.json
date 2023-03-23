@@ -12,14 +12,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mrSerGL/webpack-training-todo_list.git"
+    "url": "git+https://github.com/mrSerGL/crud-training-todo_list.git"
+    
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/mrSerGL/webpack-training-todo_list/issues"
+    "url": "https://github.com/mrSerGL/crud-training-todo_list/issues"
   },
-  "homepage": "https://github.com/mrSerGL/webpack-training-todo_list",
+  "homepage": "https://github.com/mrSerGL/crud-training-todo_list",
   "devDependencies": {
     "@babel/core": "^7.21.0",
     "@babel/eslint-parser": "^7.19.1",
