@@ -1,10 +1,7 @@
-// import localStore from '../services/storage';
-import { nanoid } from 'nanoid';
-import crudFunctions from '../services/crud_functions';
+import axios from 'axios';
+import crudFuncService from '../services/crud_functions';
 
 class TodoList {
-  #STORAGE_KEY = 'TODO_LIST_ITEMS';
-  #ENTER_KEY_CODE = 'Enter';
 
   #appMarkup = `
     <div class="todo-list">
@@ -30,7 +27,6 @@ class TodoList {
 
     this.#defineRefs();
     this.#initListeners();
-    // this.#render();
     this.#getTasks();
   }
 
@@ -52,7 +48,8 @@ class TodoList {
   }
 
   #getTasks() {
-    crudFunctions
+    crudFuncService
+
       .getTasks()
       .then((tasks) => {
         this.#updateItems(tasks);
@@ -65,14 +62,14 @@ class TodoList {
   #updateItems(items) {
     this.#items = items;
     this.#render();
-    // localStore.save(this.#STORAGE_KEY, items)
   }
 
   #addTask() {
     const { value } = this.#refs.itemInput;
 
     if (value) {
-      crudFunctions
+      crudFuncService
+
         .createTask({ value, done: false })
         .then((task) => {
           this.#getTasks();
@@ -85,7 +82,9 @@ class TodoList {
   }
 
   #addTaskByEnterKey(e) {
-    if (e.code === this.#ENTER_KEY_CODE) {
+     console.log(e.code);
+     
+    if (e.code === 'Enter' || e.code === 'NumpadEnter' ) {
       this.#addTask();
     }
   }
@@ -105,7 +104,8 @@ class TodoList {
   }
 
   #removeTask(id) {
-    crudFunctions
+    crudFuncService
+
       .deleteTask(id)
       .then(() => {
         this.#getTasks();
@@ -114,13 +114,16 @@ class TodoList {
   }
 
   #toggleTask(id) {
-    crudFunctions
-      .updateTask(id, { done: true })
+    const taskIndex = this.#items.findIndex((item) => item.id === parseInt(id));
+    const task = this.#items[taskIndex];
+
+    crudFuncService
+      .updateTask(id, { done: !task.done })
       .then((task) => {
         this.#getTasks();
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((e) => {
+        console.log(e);
       });
 
     // this.#updateItems(items);
@@ -151,5 +154,4 @@ class TodoList {
 }
 
 const todoList = new TodoList();
-// const crudFuncService = new CrudFuncService();
 todoList.init();

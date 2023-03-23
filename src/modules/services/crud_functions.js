@@ -1,19 +1,23 @@
+import axios from 'axios';
+/* 
+  C-create R-read U-update D-delete
+*/
+
 const BASE_URL = 'http://localhost:3000';
 
-class CrudFuncService {
+class TasksServiceWithFetch {
+  // R-read
+  // GET
   getTasks() {
     return fetch(`${BASE_URL}/tasks`).then((response) => response.json());
   }
 
-  getTasksById(id) {
-    return fetch(`${BASE_URL}/tasks/${id}`).then((response) => {
-      if (response.ok) {
-        return response.json();
-      }
-      throw new Error(response.status);
-    });
+  getTaskById(id) {
+    return fetch(`${BASE_URL}/tasks/${id}`).then((response) => response.json());
   }
 
+  // C-create
+  // POST
   createTask(task) {
     const options = {
       method: 'POST',
@@ -26,6 +30,8 @@ class CrudFuncService {
     return fetch(`${BASE_URL}/tasks`, options).then((response) => response.json());
   }
 
+  // U-Update
+  // PATCH
   updateTask(id, data) {
     const options = {
       method: 'PATCH',
@@ -35,32 +41,56 @@ class CrudFuncService {
       body: JSON.stringify(data),
     };
 
-    return fetch(`${BASE_URL}/tasks/${id}`, options).then((response) => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error(response.status);
-      });
+    return fetch(`${BASE_URL}/tasks/${id}`, options).then((response) => response.json());
   }
 
+  // D-Delete
+  // DELETE
   deleteTask(id) {
-    const options = {
-      method: 'DELETE',
-    };
+    // const options = {
+    //   method: 'DELETE',
+    // };
 
-    return fetch(`${BASE_URL}/tasks/${id}`, options).then((response) => response.json());
+    // return fetch(`${BASE_URL}/tasks/${id}`, options).then((response) => response.json());
+    return axios.delete(`${BASE_URL}/tasks/${id}`);
   }
 }
 
-export default new CrudFuncService();
-const crudFuncService = new CrudFuncService();
+class TasksService {
+  getTasks() {
+    return axios.get(`${BASE_URL}/tasks`).then(({ data }) => data);
+  }
 
-// crudFuncService.getTasks().then((data) => console.log(data));
+  getTaskById(id) {
+    return axios.get(`${BASE_URL}/tasks/${id}`).then(({ data }) => data);
+  }
 
-// crudFuncService.getTasksById(4).then((data) => console.log(data));
+  createTask(newTask) {
+    return axios.post(`${BASE_URL}/tasks`, newTask).then(({ data }) => data);
+  }
 
-// crudFuncService.createTask({value:'щось створилось', done: false}).then((data) => console.log(data));
+  updateTask(id, data) {
+    return axios.patch(`${BASE_URL}/tasks/${id}`, data).then(({ data }) => data);
+  }
 
-// crudFuncService.updateTask(13,{value:'а тепер щось змінилось', done: true}).then((data) => console.log(data));
+  deleteTask(id) {
+    return axios.delete(`${BASE_URL}/tasks/${id}`);
+  }
+}
 
-// crudFuncService.deleteTask(13).then((data) => console.log(data));
+export default new TasksService();
+
+// const taskService = new TasksService();
+
+// taskService.getTasks().then((data) => console.log(data));
+// taskService.getTaskById(13).then((data) => console.log(data));
+// taskService.createTask({ value: 'Манго', done: false }).then((data) => console.log(data));
+// taskService
+//   .updateTask(356, { value: 'Tomato Green' })
+//   .then((data) => {
+//     console.log('then', data);
+//   })
+//   .catch((error) => {
+//     console.log(error);
+//   });
+// taskService.deleteTask(11).then((data) => console.log(data));
