@@ -82,7 +82,6 @@ class TodoList {
   }
 
   #addTaskByEnterKey(e) {
-     console.log(e.code);
      
     if (e.code === 'Enter' || e.code === 'NumpadEnter' ) {
       this.#addTask();

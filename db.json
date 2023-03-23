@@ -1,19 +1,24 @@
 {
   "tasks": [
     {
-      "value": "eeeeeeeeeeeee",
+      "value": "добавить в онлайн",
       "done": false,
-      "id": 29
+      "id": 32
     },
     {
-      "value": "qqqqqqqqqqqqqq",
+      "value": "npn start",
       "done": false,
-      "id": 30
+      "id": 33
     },
     {
-      "value": "ffffffffffffffffff",
+      "value": "npm run server",
       "done": false,
-      "id": 31
+      "id": 34
+    },
+    {
+      "value": "дописать резюме",
+      "done": false,
+      "id": 35
     }
   ]
 }
