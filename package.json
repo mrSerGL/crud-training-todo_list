@@ -7,13 +7,13 @@
     "start": "webpack-dev-server  --mode=development",
     "prod": "webpack --mode=production",
     "dev": "webpack --mode=development",
+    "server": "json-server --watch db.json",
     "predeploy": "npm run dev",
     "deploy": "gh-pages -d build"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mrSerGL/crud-training-todo_list.git"
-    
   },
   "author": "",
   "license": "ISC",
@@ -43,6 +43,7 @@
     "webpack-dev-server": "^4.11.1"
   },
   "dependencies": {
+    "json-server": "^0.17.3",
     "nanoid": "^4.0.1",
     "normalize.css": "^8.0.1",
     "simplelightbox": "^2.12.1"

@@ -37,6 +37,6 @@ module.exports = {
     // new ESLintPlugin(),
   ],
   devServer: {
-    port: 3000,
+    port: 2000,
   },
 };

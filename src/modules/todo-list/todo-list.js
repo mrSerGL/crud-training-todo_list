@@ -1,9 +1,10 @@
-import localStore from '../services/storage';
+// import localStore from '../services/storage';
 import { nanoid } from 'nanoid';
+import crudFunctions from '../services/crud_functions';
 
 class TodoList {
-#STORAGE_KEY ='TODO_LIST_ITEMS';
-#ENTER_KEY_CODE = 'Enter';
+  #STORAGE_KEY = 'TODO_LIST_ITEMS';
+  #ENTER_KEY_CODE = 'Enter';
 
   #appMarkup = `
     <div class="todo-list">
@@ -21,7 +22,7 @@ class TodoList {
   `;
 
   #refs = {};
-  #items = localStore.load(this.#STORAGE_KEY) || [];
+  #items = [];
 
   init(targetNode) {
     const targetElement = targetNode || document.body;
@@ -29,7 +30,8 @@ class TodoList {
 
     this.#defineRefs();
     this.#initListeners();
-    this.#render();
+    // this.#render();
+    this.#getTasks();
   }
 
   #defineRefs() {
@@ -49,19 +51,35 @@ class TodoList {
     this.#refs.itemInput.addEventListener('keypress', this.#addTaskByEnterKey.bind(this));
   }
 
-  #updateItems(items){
+  #getTasks() {
+    crudFunctions
+      .getTasks()
+      .then((tasks) => {
+        this.#updateItems(tasks);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  #updateItems(items) {
     this.#items = items;
     this.#render();
-    localStore.save(this.#STORAGE_KEY, items)
+    // localStore.save(this.#STORAGE_KEY, items)
   }
 
   #addTask() {
     const { value } = this.#refs.itemInput;
 
     if (value) {
-       const items =[...this.#items];
-       items.push({ id: nanoid(), value, done: false }); 
-       this.#updateItems(items);
+      crudFunctions
+        .createTask({ value, done: false })
+        .then((task) => {
+          this.#getTasks();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
     this.#refs.itemInput.value = null;
   }
@@ -87,26 +105,28 @@ class TodoList {
   }
 
   #removeTask(id) {
-    const items = this.#items.filter((item) => item.id !== id);
-    this.#updateItems(items);
+    crudFunctions
+      .deleteTask(id)
+      .then(() => {
+        this.#getTasks();
+      })
+      .catch((error) => console.log(error));
   }
 
   #toggleTask(id) {
-    const items = this.#items.map((item) => {
-      if (id === item.id) {
-        return {
-          ...item,
-          done: !item.done,
-        };
-      }
+    crudFunctions
+      .updateTask(id, { done: true })
+      .then((task) => {
+        this.#getTasks();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
-      return item;
-    });
-
-    this.#updateItems(items);
+    // this.#updateItems(items);
   }
 
-  #render(){
+  #render() {
     const getItem = ({ id, value, done }) =>
       `
      <li class="list__item" data-id="${id}" data-done="${done}">
@@ -131,4 +151,5 @@ class TodoList {
 }
 
 const todoList = new TodoList();
+// const crudFuncService = new CrudFuncService();
 todoList.init();
